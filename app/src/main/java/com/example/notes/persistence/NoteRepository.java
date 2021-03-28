@@ -11,7 +11,7 @@ import java.util.List;
 public class NoteRepository {
     private NoteDatabase mNoteDatabase;
 
-    private NoteRepository(Context context){
+    public NoteRepository(Context context){
         mNoteDatabase = NoteDatabase.getInstance(context);
     }
 
@@ -22,7 +22,7 @@ public class NoteRepository {
 
     }
     public LiveData<List<Note>> retrieveNotesTask(){
-        return null;
+        return mNoteDatabase.getNoteDao().getNotes();
     }
     public void deleteNote(Note note){
 
