@@ -106,9 +106,13 @@ public class NotesListActivity extends AppCompatActivity implements
 
     private void deleteNote(Note note){
         mNotes.remove(note);
-        Toast.makeText(this, note.getTitle() + " removed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, note.getTitle() + " Note Removed", Toast.LENGTH_SHORT).show();
         mNotesRecyclerAdapter.notifyDataSetChanged();
+
+        mNoteRepository.deleteNote(note);
     }
+
+
     private ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
