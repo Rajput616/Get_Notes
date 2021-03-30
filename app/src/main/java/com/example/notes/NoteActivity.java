@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -18,12 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.notes.models.Note;
+import com.example.notes.persistence.NoteRepository;
 
 public class NoteActivity extends AppCompatActivity implements
                                   View.OnTouchListener,
                                   GestureDetector.OnGestureListener,
                                   GestureDetector.OnDoubleTapListener,
-                                  View.OnClickListener {
+                                  View.OnClickListener,
+        TextWatcher {
     private static final String TAG = "NoteActivity";
     private static final int EDIT_MODE_ENABLED = 1;
     private static final int EDIT_MODE_DISABLED = 0;
@@ -42,6 +46,9 @@ public class NoteActivity extends AppCompatActivity implements
     private Note mInitialNote;
     private GestureDetector mGestureDetector;
     private int mMode;
+    private NoteRepository mNoteRepository;
+
+    private Note mFinalNote;
 
 
     @Override
@@ -55,6 +62,8 @@ public class NoteActivity extends AppCompatActivity implements
         mBackArrowContainer = findViewById(R.id.back_arrow_container);
         mCheck = findViewById(R.id.toolbar_check);
         mBackArrow = findViewById(R.id.toolbar_back_arrow);
+
+        mNoteRepository = new NoteRepository(this);
 
         if(getIncomingIntent()){
             // This is a new note (Edit Mode)
@@ -74,12 +83,14 @@ public class NoteActivity extends AppCompatActivity implements
         mViewTitle.setOnClickListener(this);
         mCheck.setOnClickListener(this);
         mBackArrow.setOnClickListener(this);
+        mEditTitle.addTextChangedListener(this);
 
     }
 
     private boolean getIncomingIntent(){
         if(getIntent().hasExtra("selected_note")){
             mInitialNote = getIntent().getParcelableExtra("selected_note");
+            mFinalNote = getIntent().getParcelableExtra("selected_note");
             Log.d(TAG, "getIncomingIntent: "+ mInitialNote.toString());
 
             mMode = EDIT_MODE_DISABLED;
@@ -89,6 +100,18 @@ public class NoteActivity extends AppCompatActivity implements
         mMode = EDIT_MODE_ENABLED;
         mIsNewNote = true;
         return true;
+    }
+
+    private void saveChanges(){
+        if(mIsNewNote){
+            saveNewNote();
+        } else{
+
+        }
+    }
+
+    private void saveNewNote(){
+        mNoteRepository.insertNoteTask(mFinalNote);
     }
 
     private void disableContentInteraction(){
@@ -129,6 +152,21 @@ public class NoteActivity extends AppCompatActivity implements
         mMode = EDIT_MODE_DISABLED;
 
         disableContentInteraction();
+
+        String temp = mLinedEditText.getText().toString();
+        temp = temp.replace("\n" ,"");
+        temp = temp.replace(" ", "");
+        if(temp.length() > 0){
+            mFinalNote.setTitle(mEditTitle.getText().toString());
+            mFinalNote.setContent(mLinedEditText.getText().toString());
+            String timestamp = "Mar 2020";
+            mFinalNote.setTimestamp(timestamp);
+
+            if(!mFinalNote.getContent().equals(mInitialNote.getContent()) ||
+                    !mFinalNote.getTitle().equals(mInitialNote.getTitle())){
+                saveChanges();
+            }
+        }
     }
 
     private void hideSoftKeyboard(){
@@ -149,6 +187,12 @@ public class NoteActivity extends AppCompatActivity implements
     private void setNewNoteProperties(){
         mViewTitle.setText("Note Title");
         mEditTitle.setText("Note Title");
+
+        mInitialNote = new Note();
+        mFinalNote = new Note();
+        mInitialNote.setTitle("Note Title");
+        mFinalNote.setTitle("Note Title");
+
     }
 
     @Override
@@ -246,5 +290,20 @@ public class NoteActivity extends AppCompatActivity implements
         if(mMode == EDIT_MODE_ENABLED){
             enableEditMode();
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mViewTitle.setText(s.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }
