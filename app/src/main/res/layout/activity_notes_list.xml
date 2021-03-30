@@ -24,7 +24,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="746dp"
         android:background="#FFFFFF"
         android:orientation="vertical"
         android:padding="1dp"
@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
+        android:contentDescription="@string/list"
         android:src="@drawable/ic_add_24"
         app:backgroundTint="#FAF5F5" />
 

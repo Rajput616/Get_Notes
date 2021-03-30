@@ -15,15 +15,15 @@
         android:background="@color/teal_700"/>
 
     <TextView
+        android:id="@+id/note_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="75"
-        android:id="@+id/note_title"
-        android:textSize="23sp"
         android:lines="1"
-        android:text="This is some title"
         android:padding="10dp"
-        android:textColor="@color/black"/>
+        android:text="@string/title"
+        android:textColor="@color/light_black"
+        android:textSize="23sp" />
 
     <View
         android:layout_width="0dp"
@@ -32,13 +32,14 @@
 
 
     <TextView
+        android:id="@+id/note_timestamp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="20"
-        android:id="@+id/note_timestamp"
-        android:textSize="17sp"
-        android:text="Mar 2021"
-        android:padding="10dp" />
+        android:padding="10dp"
+        android:text="@string/Date"
+        android:textColor="@color/light_black"
+        android:textSize="17sp" />
 
 
 </LinearLayout>

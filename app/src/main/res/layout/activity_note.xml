@@ -22,13 +22,18 @@
             <include layout="@layout/layout_note_toolbar"/>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
     <com.example.notes.LinedEditText
+        android:id="@+id/note_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/note_text"
-        android:textSize="23sp"
-        android:textColor="@color/black"
-        android:padding="5dp"
         android:gravity="top"
-        android:imeOptions="flagNoExtractUi"/>
+        android:imeOptions="flagNoExtractUi"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textColorLink="#00E2FF"
+        android:textColorHighlight="@color/white"
+        android:textCursorDrawable="@color/dark_red"
+        android:textIsSelectable="true"
+        android:textSize="23sp" />
 </LinearLayout>
